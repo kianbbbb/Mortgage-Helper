@@ -849,3 +849,167 @@ body {
   .summary-grid { grid-template-columns: 1fr; }
   .modal-body { padding: 1rem; }
 }
+
+/* ─── Live Rate Indicator ────────────────────────────────────────────────── */
+.rate-indicator {
+  background: var(--grey-50);
+  border: 1.5px solid var(--grey-200);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.rate-indicator.live {
+  border-color: var(--green);
+  background: var(--green-light);
+}
+
+.rate-indicator.cached {
+  border-color: var(--amber);
+  background: var(--amber-light);
+}
+
+.rate-indicator-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.rate-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.rate-dot.live {
+  background: var(--green);
+  box-shadow: 0 0 4px var(--green);
+}
+
+.rate-dot.cached {
+  background: var(--amber);
+}
+
+.rate-indicator-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--grey-700);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.rate-indicator-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--grey-900);
+  letter-spacing: -0.02em;
+}
+
+.rate-indicator-source {
+  font-size: 0.7rem;
+  color: var(--grey-500);
+}
+
+/* ─── Chip / Filter Group ────────────────────────────────────────────────── */
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.8rem;
+  font-family: var(--font);
+  border: 1.5px solid var(--grey-300);
+  border-radius: 2rem;
+  background: #fff;
+  color: var(--grey-700);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.filter-chip:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.filter-chip.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+  font-weight: 600;
+}
+
+.clear-filter-btn {
+  background: none;
+  border: none;
+  color: var(--grey-500);
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 0.2rem 0;
+  font-family: var(--font);
+  text-decoration: underline;
+  transition: color 0.15s;
+}
+
+.clear-filter-btn:hover {
+  color: var(--red);
+}
+
+/* ─── Affordability Panel ────────────────────────────────────────────────── */
+.affordability-result {
+  background: var(--blue-light);
+  border: 1.5px solid var(--blue);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.affordability-header {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--blue-dark);
+}
+
+.affordability-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--blue-dark);
+  letter-spacing: -0.02em;
+}
+
+.affordability-note {
+  font-size: 0.72rem;
+  color: var(--grey-500);
+  line-height: 1.4;
+}
+
+.info-banner.success {
+  background: var(--green-light);
+  border: 1px solid var(--green);
+  color: #166534;
+}
+
+/* ─── Tracker Info Badge ─────────────────────────────────────────────────── */
+.rate-tracker-info {
+  font-size: 0.75rem;
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* ─── Filter Count ───────────────────────────────────────────────────────── */
+.filter-count {
+  font-weight: 400;
+  color: var(--grey-400);
+  font-size: 0.8rem;
+}

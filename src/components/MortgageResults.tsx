@@ -1,5 +1,5 @@
 import React from 'react';
-import type { MortgageResult, SortField, SortDirection } from '../types/mortgage';
+import type { MortgageResult, SortField, SortDirection, FilterOptions } from '../types/mortgage';
 import { MORTGAGE_TYPE_LABELS } from '../data/mortgages';
 import { formatGBP, formatPct } from '../utils/calculations';
 
@@ -8,10 +8,9 @@ interface Props {
   sortField: SortField;
   sortDirection: SortDirection;
   showIneligible: boolean;
-  typeFilter: string;
+  filters: FilterOptions;
   onSortChange: (field: SortField) => void;
   onToggleIneligible: () => void;
-  onTypeFilterChange: (type: string) => void;
   onSelectProduct: (result: MortgageResult) => void;
 }
 
@@ -23,30 +22,39 @@ const SORT_LABELS: Record<SortField, string> = {
   aprc: 'APRC',
 };
 
-const TYPE_OPTIONS = [
-  { value: '', label: 'All Types' },
-  { value: 'fixed', label: 'Fixed Rate' },
-  { value: 'tracker', label: 'Tracker' },
-  { value: 'discount', label: 'Discount' },
-  { value: 'interest-only', label: 'Interest-Only' },
-];
-
 export const MortgageResults: React.FC<Props> = ({
   results,
   sortField,
   sortDirection,
   showIneligible,
-  typeFilter,
+  filters,
   onSortChange,
   onToggleIneligible,
-  onTypeFilterChange,
   onSelectProduct,
 }) => {
   const eligible = results.filter((r) => r.eligible);
 
-  const filtered = (showIneligible ? results : eligible).filter(
-    (r) => !typeFilter || r.product.type === typeFilter,
-  );
+  // Apply sidebar filters
+  const applyFilters = (r: MortgageResult) => {
+    if (filters.mortgageTypes.length > 0 && !filters.mortgageTypes.includes(r.product.type)) {
+      return false;
+    }
+    if (filters.initialPeriods.length > 0 && !filters.initialPeriods.includes(r.product.initialPeriodYears)) {
+      return false;
+    }
+    if (filters.lenders.length > 0 && !filters.lenders.includes(r.product.lender)) {
+      return false;
+    }
+    if (filters.noFeeOnly && r.product.arrangementFee > 0) {
+      return false;
+    }
+    if (filters.noERCOnly && r.product.earlyRepaymentCharge) {
+      return false;
+    }
+    return true;
+  };
+
+  const filtered = (showIneligible ? results : eligible).filter(applyFilters);
 
   const bestId = eligible.length > 0 ? eligible[0].product.id : null;
 
@@ -72,13 +80,23 @@ export const MortgageResults: React.FC<Props> = ({
     );
   }
 
+  const activeFilterCount =
+    (filters.mortgageTypes.length > 0 ? 1 : 0) +
+    (filters.initialPeriods.length > 0 ? 1 : 0) +
+    (filters.lenders.length > 0 ? 1 : 0) +
+    (filters.noFeeOnly ? 1 : 0) +
+    (filters.noERCOnly ? 1 : 0);
+
   return (
     <div className="results-panel">
       {/* Controls bar */}
       <div className="results-controls">
         <div className="controls-left">
           <span className="results-count">
-            {eligible.length} eligible product{eligible.length !== 1 ? 's' : ''} of {results.length}
+            {filtered.length} product{filtered.length !== 1 ? 's' : ''} shown
+            {activeFilterCount > 0 && (
+              <span className="filter-count"> ({activeFilterCount} filter{activeFilterCount !== 1 ? 's' : ''} active)</span>
+            )}
           </span>
           <label className="toggle-label">
             <input
@@ -88,19 +106,6 @@ export const MortgageResults: React.FC<Props> = ({
             />
             Show ineligible
           </label>
-        </div>
-        <div className="controls-right">
-          <select
-            className="type-filter"
-            value={typeFilter}
-            onChange={(e) => onTypeFilterChange(e.target.value)}
-          >
-            {TYPE_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
         </div>
       </div>
 
@@ -153,6 +158,11 @@ export const MortgageResults: React.FC<Props> = ({
                       ` (${result.product.initialPeriodYears}yr)`}
                   </span>
                 </div>
+                {result.product.trackerMargin != null && (
+                  <div className="rate-tracker-info">
+                    📡 BoE + {result.product.trackerMargin.toFixed(2)}% (live)
+                  </div>
+                )}
                 {result.product.initialPeriodYears < 999 && (
                   <div className="rate-revert">
                     Reverts to {formatPct(result.product.revertRate)} SVR

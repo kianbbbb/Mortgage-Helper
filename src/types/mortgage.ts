@@ -32,6 +32,8 @@ export interface MortgageProduct {
   supportsInterestOnly: boolean;
   /** Overall Cost for Comparison (APRC) as a percentage */
   aprc: number;
+  /** For tracker products: margin above BoE base rate (percentage points) */
+  trackerMargin?: number;
 }
 
 export interface MortgageInputs {
@@ -69,3 +71,35 @@ export type SortField =
   | 'aprc';
 
 export type SortDirection = 'asc' | 'desc';
+
+/** Filters applied on the sidebar to narrow down products */
+export interface FilterOptions {
+  mortgageTypes: MortgageType[];
+  initialPeriods: number[];
+  lenders: string[];
+  noFeeOnly: boolean;
+  noERCOnly: boolean;
+}
+
+/** Affordability / income inputs for borrowing capacity */
+export interface AffordabilityInputs {
+  annualIncome: number;
+  secondIncome: number;
+  monthlyCommitments: number;
+}
+
+/** Computed borrowing capacity result */
+export interface BorrowingCapacity {
+  maxBorrowing: number;
+  incomeMultiple: number;
+  stressTestedMonthly: number;
+  affordableAtStressRate: boolean;
+}
+
+/** Live rate data fetched from external sources */
+export interface RateData {
+  baseRate: number;
+  source: string;
+  lastUpdated: string;
+  isLive: boolean;
+}
