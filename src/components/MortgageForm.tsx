@@ -7,7 +7,7 @@ import type {
   AffordabilityInputs,
   RateData,
 } from '../types/mortgage';
-import { MORTGAGE_TYPE_LABELS, LENDERS, INITIAL_PERIODS } from '../data/mortgages';
+import { LENDERS, INITIAL_PERIODS } from '../data/mortgages';
 
 interface Props {
   inputs: MortgageInputs;
@@ -384,8 +384,7 @@ export const MortgageForm: React.FC<Props> = ({
             £{Math.round(maxAffordableLoan).toLocaleString('en-GB')}
           </div>
           <p className="affordability-note">
-            Based on {MORTGAGE_TYPE_LABELS['fixed']} rates at 4.5× income,
-            stress-tested at +3% above product rate.
+            Based on 4.5× income, stress-tested at +3% above representative rates.
           </p>
           {loanAmount > 0 && loanAmount > maxAffordableLoan && (
             <div className="info-banner warning" style={{ marginTop: '0.5rem' }}>

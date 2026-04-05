@@ -24,8 +24,8 @@ export async function fetchBaseRate(): Promise<RateData> {
 
     const url =
       `https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp` +
-      `?Travel=NIxIRx&FromSeries=1&ToSeries=50&DAession=DA` +
-      `&Ession=DA012345&csv.x=1&SeriesCodes=IUDBEDR&UsingCodes=Y&CSVF=TN` +
+      `?Travel=NIxIRx&FromSeries=1&ToSeries=50&DASession=DA` +
+      `&Session=DA012345&csv.x=1&SeriesCodes=IUDBEDR&UsingCodes=Y&CSVF=TN` +
       `&Datefrom=${encodeURIComponent(startDate)}&Dateto=${encodeURIComponent(endDate)}`;
 
     const controller = new AbortController();
