@@ -216,6 +216,7 @@ export const MORTGAGE_PRODUCTS: MortgageProduct[] = [
     maxLoan: 2000000,
     supportsInterestOnly: true,
     aprc: 7.7,
+    trackerMargin: 0.94,
   },
   {
     id: 'lloyds-tracker-2yr-75',
@@ -232,6 +233,7 @@ export const MORTGAGE_PRODUCTS: MortgageProduct[] = [
     maxLoan: 2000000,
     supportsInterestOnly: false,
     aprc: 7.8,
+    trackerMargin: 1.19,
   },
   {
     id: 'lloyds-tracker-2yr-85',
@@ -248,6 +250,7 @@ export const MORTGAGE_PRODUCTS: MortgageProduct[] = [
     maxLoan: 1000000,
     supportsInterestOnly: false,
     aprc: 7.9,
+    trackerMargin: 1.49,
   },
 
   // ─── Lifetime Tracker ───────────────────────────────────────────────────────
@@ -266,6 +269,7 @@ export const MORTGAGE_PRODUCTS: MortgageProduct[] = [
     maxLoan: 1000000,
     supportsInterestOnly: false,
     aprc: 5.1,
+    trackerMargin: 0.75,
   },
   {
     id: 'santander-lifetime-tracker-75',
@@ -282,6 +286,7 @@ export const MORTGAGE_PRODUCTS: MortgageProduct[] = [
     maxLoan: 1000000,
     supportsInterestOnly: false,
     aprc: 5.3,
+    trackerMargin: 1.0,
   },
 
   // ─── Discount (Variable) ────────────────────────────────────────────────────
@@ -410,3 +415,15 @@ export const MORTGAGE_TYPE_LABELS: Record<string, string> = {
   discount: 'Discount',
   'interest-only': 'Interest-Only',
 };
+
+/** All unique lenders from the product set */
+export const LENDERS = [
+  ...new Set(MORTGAGE_PRODUCTS.map((p) => p.lender)),
+].sort();
+
+/** All unique initial periods (excluding lifetime = 999) */
+export const INITIAL_PERIODS = [
+  ...new Set(
+    MORTGAGE_PRODUCTS.map((p) => p.initialPeriodYears).filter((y) => y < 999),
+  ),
+].sort((a, b) => a - b);
