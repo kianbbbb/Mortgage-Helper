@@ -47,12 +47,12 @@ describe('calcBorrowingCapacity', () => {
     const lowEarner: AffordabilityInputs = {
       annualIncome: 20000,
       secondIncome: 0,
-      monthlyCommitments: 1000,
+      monthlyCommitments: 1200, // disposable = 20000/12 - 1200 = ~466/mo
     };
     const result = calcBorrowingCapacity(lowEarner, 4.5, 25);
     // Max borrowing = 90000, stress monthly on 90k at 7.5% over 25yr is ~665
-    // Disposable = 20000/12 - 1000 = 666.67 — very tight
-    expect(result.stressTestedMonthly).toBeGreaterThan(0);
+    // Disposable = 20000/12 - 1200 = ~466 — well below stressed payment
+    expect(result.affordableAtStressRate).toBe(false);
   });
 });
 

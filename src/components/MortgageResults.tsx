@@ -9,6 +9,7 @@ interface Props {
   sortDirection: SortDirection;
   showIneligible: boolean;
   filters: FilterOptions;
+  isRateLive: boolean;
   onSortChange: (field: SortField) => void;
   onToggleIneligible: () => void;
   onSelectProduct: (result: MortgageResult) => void;
@@ -28,6 +29,7 @@ export const MortgageResults: React.FC<Props> = ({
   sortDirection,
   showIneligible,
   filters,
+  isRateLive,
   onSortChange,
   onToggleIneligible,
   onSelectProduct,
@@ -160,7 +162,7 @@ export const MortgageResults: React.FC<Props> = ({
                 </div>
                 {result.product.trackerMargin != null && (
                   <div className="rate-tracker-info">
-                    📡 BoE + {result.product.trackerMargin.toFixed(2)}% (live)
+                    📡 BoE + {result.product.trackerMargin.toFixed(2)}%{isRateLive ? ' (live)' : ' (cached)'}
                   </div>
                 )}
                 {result.product.initialPeriodYears < 999 && (

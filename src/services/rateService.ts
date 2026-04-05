@@ -82,7 +82,11 @@ export function applyLiveRates(
   return products.map((product) => {
     if (product.trackerMargin != null) {
       const newRate = parseFloat((baseRate + product.trackerMargin).toFixed(2));
-      return { ...product, initialRate: newRate };
+      // Lifetime trackers (initialPeriodYears >= 999) track forever,
+      // so their revert rate should also be updated to match.
+      const newRevertRate =
+        product.initialPeriodYears >= 999 ? newRate : product.revertRate;
+      return { ...product, initialRate: newRate, revertRate: newRevertRate };
     }
     return product;
   });

@@ -66,4 +66,21 @@ describe('applyLiveRates', () => {
     const updated = applyLiveRates([noMargin], 5.0);
     expect(updated[0].initialRate).toBe(TRACKER_PRODUCT.initialRate); // unchanged
   });
+
+  it('updates revertRate for lifetime trackers (initialPeriodYears >= 999)', () => {
+    const lifetimeTracker: MortgageProduct = {
+      ...TRACKER_PRODUCT,
+      initialPeriodYears: 999,
+      revertRate: 5.25, // same as initial — tracks forever
+    };
+    const updated = applyLiveRates([lifetimeTracker], 4.75);
+    expect(updated[0].initialRate).toBeCloseTo(5.75); // 4.75 + 1.0
+    expect(updated[0].revertRate).toBeCloseTo(5.75); // also updated for lifetime
+  });
+
+  it('does not update revertRate for non-lifetime trackers', () => {
+    const updated = applyLiveRates([TRACKER_PRODUCT], 4.75); // initialPeriodYears = 2
+    expect(updated[0].initialRate).toBeCloseTo(5.75);
+    expect(updated[0].revertRate).toBe(7.99); // revert stays as SVR
+  });
 });

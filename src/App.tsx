@@ -91,11 +91,12 @@ export default function App() {
     return [...eligible, ...ineligible];
   }, [inputs, sortField, sortDirection, isValidInput, products]);
 
-  // Calculate max affordable loan (use a representative rate of 4.5%)
+  // Calculate max affordable loan using live base rate when available
   const maxAffordableLoan = useMemo(() => {
     if (affordability.annualIncome <= 0) return null;
-    return calcMaxAffordableLoan(affordability, 4.5, inputs.termYears);
-  }, [affordability, inputs.termYears]);
+    const representativeRate = rateData ? rateData.baseRate : 4.5;
+    return calcMaxAffordableLoan(affordability, representativeRate, inputs.termYears);
+  }, [affordability, inputs.termYears, rateData]);
 
   const handleSortChange = (field: SortField) => {
     if (field === sortField) {
@@ -147,6 +148,7 @@ export default function App() {
               sortDirection={sortDirection}
               showIneligible={showIneligible}
               filters={filters}
+              isRateLive={rateData?.isLive ?? false}
               onSortChange={handleSortChange}
               onToggleIneligible={() => setShowIneligible((v) => !v)}
               onSelectProduct={setSelectedResult}
